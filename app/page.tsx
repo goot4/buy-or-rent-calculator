@@ -2,23 +2,28 @@
 import Calculator from "@/components/calculator";
 import Statistics from "@/components/statistics";
 import {useState} from "react";
+import {statistics} from "@/api/definatoin";
 
 export default function Home() {
-  const [predictedAnnualYield, setPredictedAnnualYield] = useState(0)
-  const [realAnnualYield, setRealAnnualYield] = useState(0)
+  const [statistics, setStatistics] = useState<statistics>({
+    annualYield: 4,
+    pricePerSquare: 50000,
+    totalSquares: 80,
+    otherFeeInPercent: 10,
+    rentFee: 4000,
+  })
   return (
     <main className={"flex flex-col m-4 p-4 border-2 border-accent rounded-3xl"}>
-      <Calculator updateStatistics={updateStatistics}/>
+      <Calculator statistics={statistics} updateStatistics={updateStatistics}/>
       <div className={"divider divider-accent"}></div>
-      <Statistics predicted={predictedAnnualYield}
-      real={realAnnualYield}/>
+      <Statistics statistics={statistics}/>
     </main>
   )
 
-  function updateStatistics(predicted:number, real:number){
-    predicted = Math.floor(predicted)
-    real = Math.floor(real)
-    setPredictedAnnualYield(predicted)
-    setRealAnnualYield(real)
+  function updateStatistics(key: string, value: number){
+    setStatistics({
+      ...statistics,
+      [key]: value,
+    })
   }
 }

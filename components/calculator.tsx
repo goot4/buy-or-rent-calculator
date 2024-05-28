@@ -1,17 +1,16 @@
 import {ChangeEvent, useEffect, useState} from "react"
 import {CircleHelp} from "lucide-react"
 import clsx from "clsx";
+import {statistics} from "@/api/definatoin";
 
 type Props = {
-  updateStatistics: (arg0:number, arg1:number)=>void
+  statistics: statistics
+  updateStatistics: (key:string, value: number)=>void
 }
 
-export default function Calculator({updateStatistics}: Props){
-  const [annualYield, setAnnualYield] = useState(4)
-  const [pricePerSquare, setPricePerSquare] = useState(50000)
-  const [totalSquares, setTotalSquares] = useState(80)
-  const [otherFeeInPercent, setOtherFeeInPercent] = useState(10)
-  const [rentFee, setRentFee] = useState(4000)
+export default function Calculator({statistics, updateStatistics}: Props){
+  const { annualYield, pricePerSquare, totalSquares,
+    otherFeeInPercent, rentFee } = statistics
 
   const price = pricePerSquare * totalSquares
   const predictedAnnualYield = price * (1+ otherFeeInPercent/100) * annualYield/100
@@ -19,13 +18,10 @@ export default function Calculator({updateStatistics}: Props){
   let diff = realAnnualYield - predictedAnnualYield
   diff = Math.floor(diff)
 
-  useEffect(()=>{
-    updateStatistics(predictedAnnualYield, realAnnualYield)
-  }, [predictedAnnualYield, realAnnualYield])
-
   return (
-    <div className={"h-[80vh] flex flex-col items-center space-y-4"}>
+    <div className={"h-[80vh] flex flex-col items-center space-y-2"}>
       <h1 className={"text-2xl"}>买还是租? 计算器帮你算</h1>
+      <p>看不太懂, 先看看<a className={"text-info text-sm"} href={"https://www.zeeebrag.pro/blog/posts/buy-or-rent-house-economic-consideration"} target={"_blank"}>科普小文章</a>了解一下.</p>
 
       <div className={"w-screen grow grid grid-cols-3 items-center"}>
         <div className={"flex flex-col items-center"}>
@@ -115,21 +111,21 @@ export default function Calculator({updateStatistics}: Props){
   )
 
   function annualYieldChangeHandler(e: ChangeEvent<HTMLInputElement>) {
-    setAnnualYield(Number(e.target.value))
+    updateStatistics("annualYield",Number(e.target.value))
   }
 
   function otherFeeChangeHandler(e: ChangeEvent<HTMLInputElement>) {
-    setOtherFeeInPercent(Number(e.target.value))
+    updateStatistics("otherFeeInPercent",Number(e.target.value))
   }
 
   function pricePerSquareChangeHandler(e: ChangeEvent<HTMLInputElement>) {
-    setPricePerSquare(Number(e.target.value))
+    updateStatistics("pricePerSquare", Number(e.target.value))
   }
 
   function totalSquaresChangeHandler(e: ChangeEvent<HTMLInputElement>) {
-    setTotalSquares(Number(e.target.value))
+    updateStatistics("totalSquares", Number(e.target.value))
   }
   function rentFeeChangeHandler(e: ChangeEvent<HTMLInputElement>) {
-    setRentFee(Number(e.target.value))
+    updateStatistics("rentFee", Number(e.target.value))
   }
 }
