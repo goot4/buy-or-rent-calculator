@@ -54,7 +54,7 @@ export default function Statistics({statistics}: Props) {
     ]
   }
   return (
-    <div className={"h-[80vh]"}>
+    <div className={"min-h-[80vh]"}>
       <h2 className={"text-2xl"}>详细数据</h2>
       <div className="stats stats-vertical shadow">
 
@@ -76,7 +76,7 @@ export default function Statistics({statistics}: Props) {
           <div className="stat-desc">实际年收益-预期年收益</div>
         </div>
       </div>
-      <ReactECharts style={{height:'38%'}} className={"mt-4"} option={option}/>
+      <ReactECharts style={{height:'240px'}} className={"mt-4"} option={option}/>
     </div>
   )
 
